@@ -1,0 +1,50 @@
+# pages/Suggested_Jobs.py
+import streamlit as st
+
+from core import is_domain_allowed
+from core.resumeManager import ResumeManager
+from core.job_recommendor import JobRecommender
+
+resp = is_domain_allowed()
+if not resp[0]:
+    st.error("This app is not allowed on this domain.")
+    st.stop()
+
+st.set_page_config(page_title="Suggested Jobs", layout="wide")
+
+st.header("🎯 Suggested Jobs")
+st.caption("Based on your uploaded resume, here are the most relevant job opportunities:")
+
+recommender = JobRecommender()
+
+if not recommender.can_get_suggestions():
+    st.error("⚠️ You have reached the maximum number of suggestions.")
+    st.stop()
+
+# Load resume text
+try:
+    resume_manager = ResumeManager("resume.txt")
+    resume_text = resume_manager.get_resume()
+except FileNotFoundError:
+    st.error("⚠️ No resume found! Please upload your resume first on the **Upload Resume** page.")
+    st.stop()
+
+# Fetch matches
+try:
+    jobs = recommender.suggest_jobs(resume_text, top_k=5, min_similarity=0.70)
+except ValueError:
+    st.error("⚠️ Total suggestions limit reached. Please try again later.")
+    st.stop()
+
+if not jobs:
+    st.warning("😕 No matching jobs found for your resume. Try updating your resume or adding more details.")
+else:
+    for job in jobs:
+        with st.container():
+            st.subheader(job["title"])
+            st.write(f"💼 **Job Type:** {job['job_type']}")
+            st.write(f"💰 **Salary:** ${job['salary']}")
+            st.write(f"🗓️ **Posted on:** {job['posted_date']}")
+            st.write("📄 **Description:**")
+            st.write(job["description"])
+            st.markdown("---")

@@ -1,0 +1,44 @@
+import streamlit as st
+
+from core import is_domain_allowed
+from core.job_manager import JobManager
+
+resp = is_domain_allowed()
+if not resp[0]:
+    st.error("This app is not allowed on this domain.")
+    st.stop()
+
+st.set_page_config(page_title="Create Job", layout="wide")
+st.title("Create New Job")
+
+job_manager = JobManager()
+
+if not job_manager.can_create_job():
+    st.error("You have reached the maximum number of jobs.")
+    st.stop()
+
+message_container = st.container()
+
+with st.form("upload_job_form"):
+    title = st.text_input("Job Title")
+    description = st.text_area("Job Description")
+    salary = st.text_input("Salary (e.g. $3000)")
+    job_type = st.selectbox("Job Type", ["Remote", "Onsite", "Hybrid"])
+    submit = st.form_submit_button("Add Job")
+
+if submit:
+    error_message = "Please fill in all fields."
+    try:
+        salary = float(salary)
+    except ValueError:
+        salary = None
+        error_message = "Salary must be a number!"
+
+    if title and description and salary is not None:
+        if not job_manager.add_job(title, description, salary, job_type):
+            error_message = "You have reached the maximum number of jobs."
+            message_container.error(error_message)
+            st.stop()
+        message_container.success(f"Job '{title}' added successfully!")
+    else:
+        message_container.error(error_message)
