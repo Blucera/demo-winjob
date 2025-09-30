@@ -1,12 +1,12 @@
-# WinSupport
-## Customer Support AI Agent, Tekedia
+# WinJob
+## Job Market Place and Job Suggestor, Tekedia
 
-WinSupport is a powerful AI agent that takes your business information in a form of PDF and based on content answer your customers. No need for manual customer support when Winsupport can handle customer fast and 24/7
+Win Job is a powerful Job marketplace that use the power of AI to analyize user resume, based on the resume It finds the best job suited for the user to apply.
 
 ## Features
-- Upload your custom knowledge, No size limit
-- Chat Screen to query from provided PDF
-- Multiple PDF supported
+- Manage Jobs
+- Upload your resume
+- See Suggested Jobs
 
 
 
@@ -35,7 +35,7 @@ For Example
 `cd htdocs/student.zenvus.com`
 
 Clone the Github Repo by the command
-`git clone https://github.com/Blucera/demo-winsupport.git .`
+`git clone https://github.com/Blucera/demo-winjob.git .`
 
 #### Making the build and Running the Container
 Run the command
@@ -52,7 +52,7 @@ And you will see this
 version: "3.9"
 
 services:
-  winsupport:
+  winjob:
     build:
       context: .
       dockerfile: Dockerfile

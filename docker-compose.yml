@@ -8,7 +8,8 @@ services:
     ports:
       - "<your_port>:8501"
     environment:
-      OLLAMA_HOST: http://host.docker.internal:11434
+      # Tell your app where to reach Ollama
+      OLLAMA_HOST: http://172.17.0.1:11434
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:172.17.0.1"
     restart: unless-stopped
