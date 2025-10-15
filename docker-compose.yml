@@ -9,7 +9,5 @@ services:
       - "<your_port>:8501"
     environment:
       # Tell your app where to reach Ollama
-      OLLAMA_HOST: http://172.17.0.1:11434
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
+      OLLAMA_HOST: https://ollama.blucera.com
     restart: unless-stopped
